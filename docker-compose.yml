@@ -1,0 +1,54 @@
+version: '3.3'
+
+services:
+  lumen:
+    # image: "php:8.0.0-apache"
+    build: .
+    container_name: "lumen"
+    working_dir: "/var/www/html"
+    volumes:
+      - ./lumen:/var/www/html
+    ports:
+      - "8000:8000"
+    # command: composer create-project --prefer-dist laravel/lumen .
+    command: php -S 0.0.0.0:8000 -t public
+    
+  # composer: # Caso precise executar algum comando do composer durante o desenvolvimento, usar -> docker-compose run --rm composer bash -c "<comando>"
+  #   image: composer:latest
+  #   container_name: "composer"
+  #   volumes:
+  #     - ./lumen:/var/www/html
+  #   working_dir: /var/www/html
+  #   depends_on:
+  #     - lumen
+  #   command: "composer install"
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: "rabbitmq"
+    ports:
+      - "5672:5672"
+  
+  vue:
+    image: "node:lts"
+    container_name: "vue"
+    user: "node"
+    working_dir: "/usr/src/app"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./vue:/usr/src/app
+    ports:
+      - "80:80"
+    command: "npm run dev -- --port 80"    
+
+  mysql:
+    image: "mysql:5.7"
+    container_name: "mysql"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=schedule_email
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
