@@ -13,16 +13,6 @@ services:
     # command: composer create-project --prefer-dist laravel/lumen .
     command: php -S 0.0.0.0:8000 -t public
     
-  # composer: # Caso precise executar algum comando do composer durante o desenvolvimento, usar -> docker-compose run --rm composer bash -c "<comando>"
-  #   image: composer:latest
-  #   container_name: "composer"
-  #   volumes:
-  #     - ./lumen:/var/www/html
-  #   working_dir: /var/www/html
-  #   depends_on:
-  #     - lumen
-  #   command: "composer install"
-
   rabbitmq:
     image: rabbitmq:latest
     container_name: "rabbitmq"
